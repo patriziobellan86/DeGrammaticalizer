@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 
 import os
 import random
-#import sys
 
 import morphItDataExtractor
 
@@ -59,8 +58,8 @@ class SentenceExtractor:
             verbfeatures[1] = verbfeatures[1][-1]  #pers
             verbfeatures[2] = morph_translator_mod[verbfeatures[2][-1]]   #modo
             verbfeatures[3] = morph_translator_ten[verbfeatures[3][-1]]   #tempo    
+            
             #ora devo ordinare le feats in modo compatibile per morphit
-           
             verbfeatures.append(verbfeatures[1])
             verbfeatures.append(verbfeatures[0])
             verbfeatures.pop(0)
@@ -89,19 +88,18 @@ class SentenceExtractor:
             for inx in self.index:
                 inxf.write (unicode(inx) + u'\n')
                 
-    def SaveSamplesInTwoFiles (self, n):
+    def SaveSamplesInTwoFiles (self,filename, n):
         #apro i due file
 #tempo code for send data to Roberto
-        with open ("SAMPLES", 'a') as fs:
+        with open (filename, 'a') as fs:
             with open(self.__fileOutTrue, 'a') as ft :
                 with open(self.__fileOutFalse, 'a') as ff:
                      while n > 0:
                          sample = self.CreateSample ()
                          if sample and sample[0] and sample[1]:
-                             ft.write (u'**'+sample[0] + u'**\n')
-                             ff.write (u'**'+sample[1] + u'**\n')
-                             
-                             fs.write ("\n\nORIGINALE: \n" + sample[0] + "\nMODIFICATA: \n" + sample[1])
+                             ft.write (sample[0] + '\r\n')
+                             ff.write (sample[1] + '\r\n')
+                             fs.write ("\n\nORIGINALE: \r\n" + sample[0] + "\r\nMODIFICATA: \r\n" + sample[1])
 
                              n -= 1
     
@@ -136,69 +134,43 @@ class SentenceExtractor:
                 verbfeatures.append(verbfeatures[0])
                 verbfeatures.pop(0)
                 verbfeatures.pop(0)
+                    
+                fsent = self.morphs.QueryPersonaOpposta(verbs[indVerb][1],
+                                             verbs[indVerb][2], verbfeatures)
+                
+                fsent = fsent[0]
+                if fsent and fsent != verbs[indVerb][1]:
+                    true_sent = " ".join([w[1].lower() for w in tsent]).strip()    
+#==============================================================================
+#                 NEW CODE
+#==============================================================================
+                    if u'....' in [x[1] for x in tsent] or len(tsent) < 5:
+                        
+                        return False
+#==============================================================================
+#                     END NEW CODE
+#==============================================================================
+                    true_sent = " "
+                    for ele in tsent:
+                        if ele[1] == verbs[indVerb][1]:
+                            true_sent += '__'+verbs[indVerb][1]+'___'
+                        else:
+                            true_sent += " " + ele[1]
+
+                    for ele in tsent:
+                        if ele[1] == verbs[indVerb][1]:
+                            ele[1] = '__'+fsent+'___'
+                    
+                    false_sent = " ".join([w[1].lower() for w in tsent]).strip()  
+                    true_sent = true_sent.strip()
+                    
+                    return true_sent, false_sent
             except:
                 return False
-                
-            fsent = self.morphs.QueryPersonaOpposta(verbs[indVerb][1],
-                                         verbs[indVerb][2], verbfeatures)
-            
-            fsent = fsent[0]
-#            print "FSENT", fsent
-#            print "TSENT", tsent
-#            print verbs[indVerb][1]
-            if fsent and fsent != verbs[indVerb][1]:
-#======================DECOMMENTARE QUANO DEBUG FINITO========================================================
-#                 true_sent = " ".join([w[1].lower() for w in tsent]).strip()
-#==============================================================================
-                true_sent = " "
-                for ele in tsent:
-                    if ele[1] == verbs[indVerb][1]:
-                        true_sent += '__'+verbs[indVerb][1]+'___'
-                    else:
-                        true_sent += " " + ele[1]
-                        
-#                pos = 0
-#                print "count ", tsent.count(verbs[indVerb][1])
-                for ele in tsent:
-                    if ele[1] == verbs[indVerb][1]:
-                        ele[1] = '__'+fsent+'___'
-                
-#                for i in range(tsent.count(verbs[indVerb][1])):
-#                    print "pos",pos
-#                    pos = tsent.index(verbs[indVerb][1], pos)
-#                    tsent[pos] = fsent
-                false_sent = " ".join([w[1].lower() for w in tsent]).strip()  
-                true_sent = true_sent.strip()
-                
-                return true_sent, false_sent
-                
             return False
         else:
             return False                       
-                    
-#                    
-#                    
-#                    if ele == verbs[indVerb][1]:
-#                        
-#                false_sent = " ".join([w[1].lower() for w in tsent]) 
-#                #ricostruisco le frasi
-#                tsent = " ".join ([w[1].lower() for w in tsent]) 
-#    #            print tsent
-#                temp = fsent[0]
-#                fsent = tsent.replace(verbs[indVerb][1], fsent[0])
-##                print type(fsent), fsent
-#                tsent = tsent.replace(verbs[indVerb][1],'___'+str(verbs[indVerb][1])+'___')
-#                fsent = fsent.replace(fsent[0],'___'+str(temp)+'___')
-#                print "True\n", tsent
-#                print "_________", verbs[indVerb][1]
-#                print "False\n", fsent
-#                print "_________", temp
-#                
-#                return true_sent, fsent.strip()
-#                
-#            return False
-#        else:
-#            return False                 
+                                   
                  
     def LoadSentence (self, inx):
         with open ( self.__corpusFilename, 'r') as fc:
@@ -209,6 +181,5 @@ class SentenceExtractor:
 if __name__=='__main__':
     a=SentenceExtractor("corpus", ['True','False'])
     a.LoadIndex ()
-    a.SaveSamplesInTwoFiles (50)
-    print "Fine"
-#    print a.index
+    a.SaveSamplesInTwoFiles ("/home/patrizio/CiMEC/DeGrammaticalizer/SAMPLES", 100)
+    print "Samples Creati"
