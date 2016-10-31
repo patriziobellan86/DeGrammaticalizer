@@ -1,7 +1,18 @@
 # -*- coding: utf-8 -*-
+#! /usr/bin/python3
+#
+#
+#
+#                   CODE TESTED ON Python 3.5
+#
+#
+#
+
 
 from __future__ import unicode_literals
 
+
+import io
 import os
 import random
 
@@ -24,7 +35,7 @@ class SentenceExtractor:
 
 
     def CreateIndexSentences (self):
-        with open(self.__corpusFilename, 'r', encoding="utf-8") as filein:
+        with io.open(self.__corpusFilename, 'r', encoding="utf-8") as filein:
             file_size = os.fstat(filein.fileno()).st_size
             while filein.tell() < file_size:
                 pos, _ = self.ExtractSentence(filein, filein.tell(), file_size)
@@ -64,10 +75,15 @@ class SentenceExtractor:
             verbfeatures.append(verbfeatures[0])
             verbfeatures.pop(0)
             verbfeatures.pop(0)
-
+            
+#            print ("Query:",verbs[indVerb][1],                                           verbs[indVerb][2],verbfeatures,"Response:", self.morphs.QueryPersonaOpposta(verbs[indVerb][1],
+#                                               verbs[indVerb][2],
+#                                                verbfeatures))
+            
             if self.morphs.QueryPersonaOpposta(verbs[indVerb][1],
                                                verbs[indVerb][2],
                                                 verbfeatures):
+#                print ("example accepted",pos_start,'\n',sentence,'\n'*5)
                 return pos_start, sentence
             return False, False
         except:
@@ -77,25 +93,28 @@ class SentenceExtractor:
 
     def LoadIndex (self):
         try:
-            with open(self.filenameIndex, 'r', encoding="utf-8") as inxf:
+            with io.open(self.filenameIndex, 'r', encoding="utf-8") as inxf:
                 self.index = [ind.strip() for ind in inxf.readlines()]
         except:
             self.CreateIndexSentences()
             self.SaveIndexSentence ()
 
+
     def SaveIndexSentence (self):
-        with open(self.filenameIndex, 'a', encoding="utf-8") as inxf:
+        with io.open(self.filenameIndex, 'a', encoding="utf-8") as inxf:
             for inx in self.index:
 ########### MODIFICA LUCA ##################
 #                inxf.write (unicode(inx) + u'\n')
                  inxf.write (str(inx) + '\n')
 
+
     def SaveSamplesInTwoFiles (self,filename, n):
         #apro i due file
+
 #tempo code for send data to Roberto
-        with open (filename, 'a', encoding="utf-8") as fs:
-            with open(self.__fileOutTrue, 'a', encoding="utf-8") as ft :
-                with open(self.__fileOutFalse, 'a', encoding="utf-8") as ff:
+        with io.open (filename, 'a', encoding="utf-8") as fs:
+            with io.open(self.__fileOutTrue, 'a', encoding="utf-8") as ft :
+                with io.open(self.__fileOutFalse, 'a', encoding="utf-8") as ff:
                      while n > 0:
                          sample = self.CreateSample ()
                          if sample and sample[0] and sample[1]:
@@ -109,7 +128,7 @@ class SentenceExtractor:
         """
             Questa funzione crea un esempio segliendolo casualmente
         """
-        indice = random.randint(0,len(self.index)-1)
+        indice = random.randint(0, len(self.index)-1)
 
         _, tsent = self.LoadSentence (self.index[indice])
 
@@ -146,25 +165,7 @@ class SentenceExtractor:
                 if fsent and fsent != verbs[indVerb][1]:
                     if u'....' in [x[1] for x in tsent] or len(tsent) < 5:
                         return False
-#==============================================================================
-#                     true_sent = " ".join([w[1] for w in tsent]).strip()
-#
-#                     true_sent = " "
-#
-#                     for ele in tsent:
-#                         if ele[1] == verbs[indVerb][1]:
-#                             true_sent += '__'+verbs[indVerb][1]+'___'
-#                         else:
-#                             true_sent += " " + ele[1]
-#
-#                     for ele in tsent:
-#                         if ele[1] == verbs[indVerb][1]:
-#                             ele[1] = '__'+fsent+'___'
-#                             break
-#
-#                     false_sent = " ".join([w[1] for w in tsent]).strip()
-#                     true_sent = true_sent.strip()
-#==============================================================================
+
                     true_sent = " "
                     false_sent = " "
                     for ele in tsent:
@@ -179,7 +180,9 @@ class SentenceExtractor:
 
                     true_sent = true_sent.strip()
                     false_sent = false_sent.strip()
-
+                    true_sent[0] = true_sent[0].upper()
+                    false_sent[0] = false_sent[0].upper()
+                    
                     if true_sent not in self.__examples:
                         self.__examples.append (true_sent)
 
@@ -195,7 +198,7 @@ class SentenceExtractor:
 
 
     def LoadSentence (self, inx):
-        with open ( self.__corpusFilename, 'r', encoding="utf-8") as fc:
+        with io.open ( self.__corpusFilename, 'r', encoding="utf-8") as fc:
             return self.ExtractSentence(fc, int(inx), os.fstat(fc.fileno()).st_size)
 
 
@@ -203,5 +206,5 @@ class SentenceExtractor:
 if __name__=='__main__':
     a=SentenceExtractor("corpus", ['True','False'])
     a.LoadIndex ()
-    a.SaveSamplesInTwoFiles ("SAMPLES", 2000)
+    a.SaveSamplesInTwoFiles ("SAMPLES", 30)
     #print "Samples Creati"
