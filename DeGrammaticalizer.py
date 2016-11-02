@@ -85,7 +85,8 @@ else:
     if not args.outFalseSentence:
         args.outFalseSentence = "FalseSentence.txt"
     if not args.morphit:
-            args.morphit = "morphitUtf8.txt"
+            args.morphit = os.path.dirname(os.path.realpath(__file__))+ \
+            os.path.sep+"morphitUtf8.txt"
     ste = SentenceExtractor.SentenceExtractor(args.morphit, args.corpus, 
                             [args.outTrueSentence, args.outFalseSentence])
     if not args.outfile:
