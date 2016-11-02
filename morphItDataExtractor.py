@@ -12,8 +12,9 @@ class MorphItDataExtractor(object):
     questa classe si occupa di estrarre i dati da morphIt
     
     """    
-    def __init__(self):
-        self.MorphItFileName="morphitUtf8.txt"
+    def __init__(self, morphit):
+        self.MorphItFileName = morphit
+            
         self.verbTags = ['VER','AUX','MOD','CAU','ASP']
         self.__verbi = []
         

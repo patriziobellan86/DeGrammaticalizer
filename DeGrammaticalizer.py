@@ -19,6 +19,10 @@ parser = argparse.ArgumentParser(prog='DeGrammaticalizer',
     "".join(open("LICENSE", "r").readlines()),    
     epilog="".join(open("CONTRIBUTORS", "r").readlines()),              )
 
+#TEMPO
+parser = argparse.ArgumentParser(prog='DeGrammaticalizer' )
+
+
 #parameters
 parser.add_argument('--corpus','-c', required=True, action='store', 
                     metavar="FILE", help="corpus")
@@ -26,6 +30,17 @@ parser.add_argument('--corpus','-c', required=True, action='store',
 parser.add_argument('--examples', '-n',required=False, action='store',
 #                    type=argparse.FileType('a'), metavar="FILE",
                     help="number of samples to create")
+                    
+#==============================================================================
+#                     NEW
+#==============================================================================
+#morphit                    
+parser.add_argument('--morphit', '-m',required=False, action='store',
+                    help="morphit")                  
+#==============================================================================
+#                     END NEW
+#==============================================================================
+                    
 #show License
 parser.add_argument('--outTrueSentence', '-t',required=False, action='store',
 #                    type=argparse.FileType('a'), metavar="FILE",
@@ -59,8 +74,9 @@ else:
         args.outTrueSentence = "TrueSentence.txt"
     if not args.outFalseSentence:
         args.outFalseSentence = "FalseSentence.txt"
-        
-    ste = SentenceExtractor.SentenceExtractor(args.corpus, 
+    if not args.morphit:
+            args.morphit = "morphitUtf8.txt"
+    ste = SentenceExtractor.SentenceExtractor(args.morphit, args.corpus, 
                             [args.outTrueSentence, args.outFalseSentence])
     if not args.outfile:
         args.outfile = "Samples.txt"

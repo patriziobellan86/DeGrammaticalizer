@@ -24,14 +24,14 @@ morph_translator_mod = {'g':'ger', 'f':'inf', 'i':'ind', 'c':'sub', 'd':'cond', 
 morph_translator_ten = {'p': 'pres', 'f': 'fut', 'i':'impf', 'r': 'past'}
 
 class SentenceExtractor:
-    def __init__ (self, corpus, filesOut):
+    def __init__ (self, morphit, corpus, filesOut):
         self.filenameIndex = 'INDEX'
         self.__corpusFilename = corpus
         self.__fileOutTrue = filesOut[0]
         self.__fileOutFalse = filesOut[1]
         self.__examples = []
         self.index = []
-        self.morphs = morphItDataExtractor.MorphItDataExtractor()
+        self.morphs = morphItDataExtractor.MorphItDataExtractor(morphit)
 
 
     def CreateIndexSentences (self):
@@ -104,14 +104,11 @@ class SentenceExtractor:
         with io.open(self.filenameIndex, 'a', encoding="utf-8") as inxf:
             for inx in self.index:
 ########### MODIFICA LUCA ##################
-#                inxf.write (unicode(inx) + u'\n')
                  inxf.write (str(inx) + '\n')
 
 
     def SaveSamplesInTwoFiles (self,filename, n):
         #apro i due file
-
-#tempo code for send data to Roberto
         with io.open (filename, 'a', encoding="utf-8") as fs:
             with io.open(self.__fileOutTrue, 'a', encoding="utf-8") as ft :
                 with io.open(self.__fileOutFalse, 'a', encoding="utf-8") as ff:
