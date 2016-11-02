@@ -13,14 +13,16 @@ import SentenceExtractor
 print ("DeGrammaticalizer")
 
 #ARGUMENTS PARSER    
-
-parser = argparse.ArgumentParser(prog='DeGrammaticalizer', 
-    description="".join(open("DESCRIPTION", "r").readlines()) + "\n" + \
-    "".join(open("LICENSE", "r").readlines()),    
-    epilog="".join(open("CONTRIBUTORS", "r").readlines()),              )
-
+try:
+    parser = argparse.ArgumentParser(prog='DeGrammaticalizer', 
+        description="".join(open("DESCRIPTION", "r").readlines()) + "\n" + \
+        "".join(open("LICENSE", "r").readlines()),    
+        epilog="".join(open("CONTRIBUTORS", "r").readlines()),              )
+except:
+     parser = argparse.ArgumentParser(prog='DeGrammaticalizer')
+     
 #TEMPO
-parser = argparse.ArgumentParser(prog='DeGrammaticalizer' )
+parser = argparse.ArgumentParser(prog='DeGrammaticalizer')
 
 
 #parameters
