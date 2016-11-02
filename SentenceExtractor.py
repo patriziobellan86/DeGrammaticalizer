@@ -25,7 +25,8 @@ morph_translator_ten = {'p': 'pres', 'f': 'fut', 'i':'impf', 'r': 'past'}
 
 class SentenceExtractor:
     def __init__ (self, morphit, corpus, filesOut):
-        self.filenameIndex = 'INDEX'
+        self.filenameIndex = os.path.dirname(os.path.realpath(__file__))+ \
+            os.path.sep+'INDEX'
         self.__corpusFilename = corpus
         self.__fileOutTrue = filesOut[0]
         self.__fileOutFalse = filesOut[1]
@@ -140,7 +141,7 @@ class SentenceExtractor:
 #            num=s|
 #            per=3|
 #            mod=i|
-#            ten=p
+#            ten=p|
             try:
                 verbfeatures[0] = verbfeatures[0][-1]   #sing/plur
                 verbfeatures[1] = verbfeatures[1][-1]  #pers

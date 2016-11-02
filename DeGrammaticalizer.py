@@ -8,6 +8,8 @@ Created on Mon Oct 17 22:10:37 2016
 # -*- coding: utf-8 -*-
 
 import argparse
+import os
+
 import SentenceExtractor
 
 print ("DeGrammaticalizer")
@@ -15,9 +17,12 @@ print ("DeGrammaticalizer")
 #ARGUMENTS PARSER    
 try:
     parser = argparse.ArgumentParser(prog='DeGrammaticalizer', 
-        description="".join(open("DESCRIPTION", "r").readlines()) + "\n" + \
-        "".join(open("LICENSE", "r").readlines()),    
-        epilog="".join(open("CONTRIBUTORS", "r").readlines()),              )
+        description="".join(open(os.path.dirname(os.path.realpath(__file__))+
+        os.path.sep+"DESCRIPTION", "r").readlines()) + "\n" + \
+        "".join(open(os.path.dirname(os.path.realpath(__file__))+
+        os.path.sep+"LICENSE", "r").readlines()),    
+        epilog="".join(open(os.path.dirname(os.path.realpath(__file__))+
+        os.path.sep+"CONTRIBUTORS", "r").readlines()),              )
 except:
      parser = argparse.ArgumentParser(prog='DeGrammaticalizer')
      
@@ -64,10 +69,13 @@ parser.add_argument("--project", "-p","-P", required=False, action="store_true",
 args = parser.parse_args()
 
 if args.licenze:
-    print ("".join(open("LICENSE", "r").readlines()))
+    print ("".join(open(os.path.dirname(os.path.realpath(__file__))+ 
+        os.path.sep+"LICENSE", "r").readlines()))
 elif args.project:
-    print (("".join(open("DESCRIPTION", "r").readlines()) + "\n" +     
-        "".join(open("CONTRIBUTORS", "r").readlines())))
+    print (("".join(open(os.path.dirname(os.path.realpath(__file__))+ 
+        os.path.sep+"DESCRIPTION", "r").readlines()) + "\n" +     
+        "".join(open(os.path.dirname(os.path.realpath(__file__))+ 
+        os.path.sep+"CONTRIBUTORS", "r").readlines())))
 else:
     if not args.examples:
         args.examples = 15
