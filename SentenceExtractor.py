@@ -110,11 +110,11 @@ class SentenceExtractor:
                 with io.open(self.__fileOutFalse, 'a', encoding="utf-8") as ff:
                      while n > 0:
                          sample = self.CreateSample ()
+                         
                          if sample and len(sample) == 4:
                              ft.write (sample[2] + '\r\n')
                              ff.write (sample[3] + '\r\n')
                              fs.write ("\n\nORIGINALE: \r\n" + sample[0] + "\r\nMODIFICATA: \r\n" + sample[1])
-
                              n -= 1
 
     def CreateSample (self):
@@ -154,13 +154,11 @@ class SentenceExtractor:
 
 
                 fsent = fsent[0]
-
                 if fsent and fsent != verbs[indVerb][1]:
-                    if u'....' in [x[1] for x in tsent] or len(tsent) < 5:
+                    if u'....' in [x[1] for x in tsent] or len(tsent) < 9:
                         return False
 
                     true_sent = false_sent = true_clear = false_clear = " "
-                    
                     for ele in tsent:
                         if ele[1] == verbs[indVerb][1]:
                             true_sent += ' __'+verbs[indVerb][1]+'___ '
@@ -174,21 +172,22 @@ class SentenceExtractor:
                             true_clear += " " + ele[1]
                             false_sent += " " + ele[1]
                             false_clear += " " + ele[1]
-                    true_sent = true_sent.strip()
-                    true_clear = true_sent.strip()
-                    false_sent = false_sent.strip()
-                    false_clear = false_sent.strip()
-                    true_sent[0] = true_sent[0].upper()
-                    true_clear[0] = true_clear[0].upper()
-                    false_sent[0] = false_sent[0].upper()
-                    false_clear[0] = false_clear[0].upper()
-                    
-                    if true_sent not in self.__examples:
-                        self.__examples.append (true_sent)
 
-                        return true_sent, false_sent, true_clear, false_clear
+                    true_sent = true_sent.strip()
+                    true_clear = true_clear.strip()
+                    false_sent = false_sent.strip()
+                    false_clear = false_clear.strip()
+                    
+                    true_sent = true_sent[0].upper() + true_sent[1:]
+                    true_clear = true_clear[0].upper() + true_clear[1:]
+                    false_sent = false_sent[0].upper() + false_sent[1:]
+                    false_clear = false_clear[0].upper() + false_clear[1:]
+                    
+                    if false_sent not in self.__examples:
+                        self.__examples.append (false_sent)
+                        return [true_sent, false_sent, true_clear, false_clear]
                     else:
-                        return False, False
+                        return False
 
             except:
                 return False

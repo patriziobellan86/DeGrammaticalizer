@@ -73,10 +73,10 @@ class MorphItDataExtractor(object):
                         maxlenverb = verb        
                         
                 #restituisco il verbo
-#                print "accettato", tverb, maxlenverb
+#                print ("accettato", tverb, maxlenverb)
                 return maxlenverb
             except:
-#                print "rejected", infin, tverb
+#                print ("rejected", infin, tverb)
                 
                 return False
         except ValueError:
@@ -125,7 +125,8 @@ class MorphItDataExtractor(object):
                     pass
                 
 if __name__ == '__main__':
+    print ("test mode")
     a =MorphItDataExtractor("morphitUtf8.txt")
-    print "fine caricamento"
+    print ("fine caricamento")
     b=a.getVerbi()
-    print b['giocare']
+    print (b['giocare'])
