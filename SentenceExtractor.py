@@ -77,10 +77,6 @@ class SentenceExtractor:
             verbfeatures.pop(0)
             verbfeatures.pop(0)
             
-#            print ("Query:",verbs[indVerb][1],                                           verbs[indVerb][2],verbfeatures,"Response:", self.morphs.QueryPersonaOpposta(verbs[indVerb][1],
-#                                               verbs[indVerb][2],
-#                                                verbfeatures))
-            
             if self.morphs.QueryPersonaOpposta(verbs[indVerb][1],
                                                verbs[indVerb][2],
                                                 verbfeatures):
@@ -104,7 +100,6 @@ class SentenceExtractor:
     def SaveIndexSentence (self):
         with io.open(self.filenameIndex, 'a', encoding="utf-8") as inxf:
             for inx in self.index:
-########### MODIFICA LUCA ##################
                  inxf.write (str(inx) + '\n')
 
 
@@ -209,7 +204,7 @@ class SentenceExtractor:
 
 
 if __name__=='__main__':
-    a=SentenceExtractor("corpus", ['True','False'])
+    a=SentenceExtractor('morphitUtf8.txt', "corpus", ['True','False'])
     a.LoadIndex ()
     a.SaveSamplesInTwoFiles ("SAMPLES", 30)
     #print "Samples Creati"
