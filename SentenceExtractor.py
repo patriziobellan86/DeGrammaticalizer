@@ -1,12 +1,27 @@
-# -*- coding: utf-8 -*-
-#! /usr/bin/python3
-#
-#
-#
-#                   CODE TESTED ON Python 3.5
-#
-#
-#
+#-*- encoding:utf-8 -*-
+"""
+                               SentenceExtractor.py
+
+This module is could be used to implement this project
+
+Vesion: 1.0-c stable
+CODE TESTED ON Python 3.5 and Python 2.7
+#==============================================================================
+Università degli studi di Trento (Tn) - Italyy
+Center for Mind/Brain Sciences CIMeC
+Language, Interaction and Computation Laboratory CLIC
+
+@author: Patrizio Bellan
+         patrizio.bellan@gmail.com
+         patrizio.bellan@studenti.unitn.it
+
+         github.com/patriziobellan86
+
+#==============================================================================
+HOW TO IMPLEMENT THIS PROJECT
+
+
+"""
 
 
 from __future__ import unicode_literals
@@ -24,7 +39,40 @@ morph_translator_mod = {'g':'ger', 'f':'inf', 'i':'ind', 'c':'sub', 'd':'cond', 
 morph_translator_ten = {'p': 'pres', 'f': 'fut', 'i':'impf', 'r': 'past'}
 
 class SentenceExtractor:
+      """
+     Args:
+        tverb (str): verb
+        infin (str): infinitive form of the verb
+        verbfeatures (list): features of the verb
+
+    Returns:
+        verb changed if exist
+        False instead
+
+
+    This method return the same verb but conjugate with the opposite person
+
+    es: sono (1 sing)         return: siamo (1 plur)
+
+    """
     def __init__ (self, morphit, corpus, filesOut):
+        """
+         Args:
+            tverb (str): verb
+            infin (str): infinitive form of the verb
+            verbfeatures (list): features of the verb
+
+        Returns:
+            verb changed if exist
+            False instead
+
+
+        This method return the same verb but conjugate with the opposite person
+
+        es: sono (1 sing)         return: siamo (1 plur)
+
+        """
+
         self.filenameIndex = os.path.dirname(os.path.realpath(__file__))+ \
             os.path.sep+'INDEX'
         self.__corpusFilename = corpus
@@ -36,6 +84,23 @@ class SentenceExtractor:
 
 
     def CreateIndexSentences (self):
+          """
+         Args:
+            tverb (str): verb
+            infin (str): infinitive form of the verb
+            verbfeatures (list): features of the verb
+
+        Returns:
+            verb changed if exist
+            False instead
+
+
+        This method return the same verb but conjugate with the opposite person
+
+        es: sono (1 sing)         return: siamo (1 plur)
+
+        """
+
         with io.open(self.__corpusFilename, 'r', encoding="utf-8") as filein:
             file_size = os.fstat(filein.fileno()).st_size
             while filein.tell() < file_size:
@@ -45,6 +110,23 @@ class SentenceExtractor:
 
 
     def ExtractSentence (self, filepointer, pos, file_size):
+      """
+         Args:
+            tverb (str): verb
+            infin (str): infinitive form of the verb
+            verbfeatures (list): features of the verb
+
+        Returns:
+            verb changed if exist
+            False instead
+
+
+        This method return the same verb but conjugate with the opposite person
+
+        es: sono (1 sing)         return: siamo (1 plur)
+
+        """
+
         line= [True]
         sentence = []
         filepointer.seek(pos, 0)
@@ -76,19 +158,34 @@ class SentenceExtractor:
             verbfeatures.append(verbfeatures[0])
             verbfeatures.pop(0)
             verbfeatures.pop(0)
-            
+
             if self.morphs.QueryPersonaOpposta(verbs[indVerb][1],
                                                verbs[indVerb][2],
                                                 verbfeatures):
-#                print ("example accepted",pos_start,'\n',sentence,'\n'*5)
                 return pos_start, sentence
             return False, False
         except:
-#            print "ERR", sentence
             return False, False
 
 
     def LoadIndex (self):
+      """
+         Args:
+            tverb (str): verb
+            infin (str): infinitive form of the verb
+            verbfeatures (list): features of the verb
+
+        Returns:
+            verb changed if exist
+            False instead
+
+
+        This method return the same verb but conjugate with the opposite person
+
+        es: sono (1 sing)         return: siamo (1 plur)
+
+        """
+
         try:
             with io.open(self.filenameIndex, 'r', encoding="utf-8") as inxf:
                 self.index = [ind.strip() for ind in inxf.readlines()]
@@ -98,24 +195,59 @@ class SentenceExtractor:
 
 
     def SaveIndexSentence (self):
+      """
+         Args:
+            tverb (str): verb
+            infin (str): infinitive form of the verb
+            verbfeatures (list): features of the verb
+
+        Returns:
+            verb changed if exist
+            False instead
+
+
+        This method return the same verb but conjugate with the opposite person
+
+        es: sono (1 sing)         return: siamo (1 plur)
+
+        """
+
         with io.open(self.filenameIndex, 'a', encoding="utf-8") as inxf:
             for inx in self.index:
                  inxf.write (str(inx) + '\n')
 
 
     def SaveSamplesInTwoFiles (self,filename, n):
+      """
+         Args:
+            tverb (str): verb
+            infin (str): infinitive form of the verb
+            verbfeatures (list): features of the verb
+
+        Returns:
+            verb changed if exist
+            False instead
+
+
+        This method return the same verb but conjugate with the opposite person
+
+        es: sono (1 sing)         return: siamo (1 plur)
+
+        """
+
         #apro i due file
         with io.open (filename, 'a', encoding="utf-8") as fs:
             with io.open(self.__fileOutTrue, 'a', encoding="utf-8") as ft :
                 with io.open(self.__fileOutFalse, 'a', encoding="utf-8") as ff:
                      while n > 0:
                          sample = self.CreateSample ()
-                         
+
                          if sample and len(sample) == 4:
                              ft.write (sample[2] + '\r\n')
                              ff.write (sample[3] + '\r\n')
                              fs.write ("\n\nORIGINALE: \r\n" + sample[0] + "\r\nMODIFICATA: \r\n" + sample[1])
                              n -= 1
+
 
     def CreateSample (self):
         """
@@ -152,7 +284,6 @@ class SentenceExtractor:
                 fsent = self.morphs.QueryPersonaOpposta(verbs[indVerb][1],
                                              verbs[indVerb][2], verbfeatures)
 
-
                 fsent = fsent[0]
                 if fsent and fsent != verbs[indVerb][1]:
                     if u'....' in [x[1] for x in tsent] or len(tsent) < 9:
@@ -177,18 +308,17 @@ class SentenceExtractor:
                     true_clear = true_clear.strip()
                     false_sent = false_sent.strip()
                     false_clear = false_clear.strip()
-                    
+
                     true_sent = true_sent[0].upper() + true_sent[1:]
                     true_clear = true_clear[0].upper() + true_clear[1:]
                     false_sent = false_sent[0].upper() + false_sent[1:]
                     false_clear = false_clear[0].upper() + false_clear[1:]
-                    
+
                     if false_sent not in self.__examples:
                         self.__examples.append (false_sent)
                         return [true_sent, false_sent, true_clear, false_clear]
                     else:
                         return False
-
             except:
                 return False
             return False
@@ -197,13 +327,23 @@ class SentenceExtractor:
 
 
     def LoadSentence (self, inx):
+      """
+         Args:
+            inx (int): index of the sentence
+
+        Returns:
+            list [sentence extracted from corpus]
+
+        This method return a sentence extracted from corpus
+
+        """
+
         with io.open ( self.__corpusFilename, 'r', encoding="utf-8") as fc:
             return self.ExtractSentence(fc, int(inx), os.fstat(fc.fileno()).st_size)
 
 
-
 if __name__=='__main__':
+    print ("Test Mode")
     a=SentenceExtractor('morphitUtf8.txt', "corpus", ['True','False'])
     a.LoadIndex ()
     a.SaveSamplesInTwoFiles ("SAMPLES", 30)
-    #print "Samples Creati"
