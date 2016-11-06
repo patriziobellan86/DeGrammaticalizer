@@ -9,7 +9,7 @@ Everything you need is not here!
 Vesion: 1.0-c stable
 CODE TESTED ON Python 3.5 and Python 2.7
 #==============================================================================
-Università degli studi di Trento (Tn) - Italyy
+Università degli studi di Trento (Tn) - Italy
 Center for Mind/Brain Sciences CIMeC
 Language, Interaction and Computation Laboratory CLIC
 
