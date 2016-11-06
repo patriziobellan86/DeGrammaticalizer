@@ -20,6 +20,12 @@ Language, Interaction and Computation Laboratory CLIC
 #==============================================================================
 HOW TO IMPLEMENT THIS PROJECT
 
+from SentenceExractor import SentenceExtractor
+
+    object = SentenceExtractor('morphitUtf8.txt', "corpus",
+                               ['Correct sentence','Wrong sentence'])
+    object.LoadIndex ()
+    object.SaveSamplesInTwoFiles ("SAMPLES", n_samples)
 
 """
 
@@ -57,9 +63,10 @@ class SentenceExtractor:
         Args:
             morphit (str): path to morphit lexicon
             corpus (str): path to corpus
-            filesOut (list) [True_sentence, False_sentence]: files to save samples
+            filesOut (list) [True_sentence, False_sentence]:
+                                                files to save samples
         """
-        self.filenameIndex = os.path.dirname(os.path.realpath(__file__))+ \
+        self.filenameIndex = os.path.dirname(os.path.realpath(__file__)) + \
             os.path.sep + 'INDEX'
         self.__corpusFilename = corpus
         self.__fileOutTrue = filesOut[0]
@@ -80,7 +87,6 @@ class SentenceExtractor:
                 pos, _ = self.ExtractSentence(filein, filein.tell(), file_size)
                 if pos:
                     self.index.append(pos)
-
 
     def ExtractSentence(self, filepointer, pos, file_size):
         """
@@ -139,7 +145,6 @@ class SentenceExtractor:
         except:
             return False, False
 
-
     def LoadIndex (self):
         """
          This method load the index file
@@ -151,7 +156,6 @@ class SentenceExtractor:
             self.CreateIndexSentences()
             self.SaveIndexSentence ()
 
-
     def SaveIndexSentence (self):
         """
          This method save indexs into file
@@ -159,7 +163,6 @@ class SentenceExtractor:
         with io.open(self.filenameIndex, 'a', encoding="utf-8") as inxf:
             for inx in self.index:
                  inxf.write (str(inx) + '\n')
-
 
     def SaveSamplesInTwoFiles (self,filename, n):
         """
@@ -180,7 +183,6 @@ class SentenceExtractor:
                             ff.write(sample[3] + '\r\n')
                             fs.write("\n\nORIGINAL: \r\n" + sample[0] + "\r\nMODIFIC: \r\n" + sample[1])
                             n -= 1
-
 
     def CreateSample (self):
         """
@@ -257,7 +259,7 @@ class SentenceExtractor:
 
                     #sample return
                     if false_sent not in self.__samples:
-                        self.__samples.append (false_sent)
+                        self.__samples.append(false_sent)
                         return [true_sent, false_sent, true_clear, false_clear]
                     else:
                         return False
@@ -266,7 +268,6 @@ class SentenceExtractor:
             return False
         else:
             return False
-
 
     def LoadSentence (self, inx):
         """
@@ -277,12 +278,13 @@ class SentenceExtractor:
 
         This method return a sentence extracted from corpus
         """
-        with io.open ( self.__corpusFilename, 'r', encoding="utf-8") as fc:
-            return self.ExtractSentence(fc, int(inx), os.fstat(fc.fileno()).st_size)
+        with io.open( self.__corpusFilename, 'r', encoding="utf-8") as fc:
+            return self.ExtractSentence(fc, int(inx),
+                                            os.fstat(fc.fileno()).st_size)
 
 
 if __name__=='__main__':
-    print ("Test Mode")
-    a=SentenceExtractor('morphitUtf8.txt', "corpus", ['True','False'])
-    a.LoadIndex ()
-    a.SaveSamplesInTwoFiles ("SAMPLES", 30)
+    print("Test Mode")
+    a = SentenceExtractor('morphitUtf8.txt', "corpus", ['True', 'False'])
+    a.LoadIndex()
+    a.SaveSamplesInTwoFiles("SAMPLES", 30)
