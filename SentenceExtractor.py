@@ -36,32 +36,31 @@ import morphItDataExtractor
 # tag of verbs
 TANL_VERB = u'V'
 # translation tables
-morph_translator_mod = {'g':'ger', 'f':'inf', 'i':'ind', 'c':'sub', 'd':'cond', 'm':'impf', 'p':'part'}
-morph_translator_ten = {'p': 'pres', 'f': 'fut', 'i':'impf', 'r': 'past'}
+morph_translator_mod = {'g': 'ger', 'f': 'inf', 'i': 'ind',
+                        'c': 'sub', 'd': 'cond', 'm': 'impf', 'p': 'part'}
+morph_translator_ten = {'p': 'pres', 'f': 'fut', 'i': 'impf', 'r': 'past'}
+
 
 class SentenceExtractor:
-     """
+    """
      This class provide all the necessary to implement this project in another
      project
-
      the aim of this class is to create 3 files:
-         samples: this file contain all the samples extrcted and marks the
-                  verb changed
-         true_sents and false_sents: every row is an example extracted from corpus
-             the latter file contatin the same sentences of the former but with
-             the verbs changed (wrong)
+     samples: this file contain all the samples extrcted and marks the
+              verb changed
+     true_sents and false_sents: every row is an example extracted from corpus
+         the latter file contatin the same sentences of the former but with
+         the verbs changed (wrong)
     """
-
-    def __init__ (self, morphit, corpus, filesOut):
+    def __init__(self, morphit, corpus, filesOut):
         """
         Args:
             morphit (str): path to morphit lexicon
             corpus (str): path to corpus
             filesOut (list) [True_sentence, False_sentence]: files to save samples
         """
-
         self.filenameIndex = os.path.dirname(os.path.realpath(__file__))+ \
-            os.path.sep+'INDEX'
+            os.path.sep + 'INDEX'
         self.__corpusFilename = corpus
         self.__fileOutTrue = filesOut[0]
         self.__fileOutFalse = filesOut[1]
@@ -69,8 +68,7 @@ class SentenceExtractor:
         self.index = []
         self.morphs = morphItDataExtractor.MorphItDataExtractor(morphit)
 
-
-    def CreateIndexSentences (self):
+    def CreateIndexSentences(self):
         """
         This method create a list of indexs.
         every index point to the beginning of a sentence in the corpus
@@ -81,10 +79,10 @@ class SentenceExtractor:
             while filein.tell() < file_size:
                 pos, _ = self.ExtractSentence(filein, filein.tell(), file_size)
                 if pos:
-                    self.index.append (pos)
+                    self.index.append(pos)
 
 
-    def ExtractSentence (self, filepointer, pos, file_size):
+    def ExtractSentence(self, filepointer, pos, file_size):
         """
          Args:
             filepointer (file_pointer): verb
@@ -172,7 +170,7 @@ class SentenceExtractor:
         This method save all samples into files
         """
         with io.open (filename, 'a', encoding="utf-8") as fs:
-            with io.open(self.__fileOutTrue, 'a', encoding="utf-8") as ft :
+            with io.open(self.__fileOutTrue, 'a', encoding="utf-8") as ft:
                 with io.open(self.__fileOutFalse, 'a', encoding="utf-8") as ff:
                      while n > 0:
                          sample = self.CreateSample ()
@@ -230,6 +228,7 @@ class SentenceExtractor:
 #                         return False
 #
 #==============================================================================
+                if fsent and fsent != verbs[indVerb][1]:
                     #sentences creation
                     true_sent = false_sent = true_clear = false_clear = " "
                     for ele in tsent:
