@@ -162,24 +162,24 @@ class SentenceExtractor:
 
 
     def SaveSamplesInTwoFiles (self,filename, n):
-      """
+        """
          Args:
             filename (str): path file to save samples
             n (int): number of samples to extract
 
         This method save all samples into files
         """
-        with io.open (filename, 'a', encoding="utf-8") as fs:
+        with io.open(filename, 'a', encoding="utf-8") as fs:
             with io.open(self.__fileOutTrue, 'a', encoding="utf-8") as ft:
                 with io.open(self.__fileOutFalse, 'a', encoding="utf-8") as ff:
-                     while n > 0:
-                         sample = self.CreateSample ()
+                    while n > 0:
+                        sample = self.CreateSample()
 
-                         if sample and len(sample) == 4:
-                             ft.write (sample[2] + '\r\n')
-                             ff.write (sample[3] + '\r\n')
-                             fs.write ("\n\nORIGINAL: \r\n" + sample[0] + "\r\nMODIFIC: \r\n" + sample[1])
-                             n -= 1
+                        if sample and len(sample) == 4:
+                            ft.write(sample[2] + '\r\n')
+                            ff.write(sample[3] + '\r\n')
+                            fs.write("\n\nORIGINAL: \r\n" + sample[0] + "\r\nMODIFIC: \r\n" + sample[1])
+                            n -= 1
 
 
     def CreateSample (self):
@@ -195,7 +195,7 @@ class SentenceExtractor:
         indice = random.randint(0, len(self.index)-1)
         _, tsent = self.LoadSentence (self.index[indice])
 
-        if tsent and not u'....' in [x[1] for x in tsent] or len(tsent) >= 9:
+        if tsent and not u'....' in [x[1] for x in tsent] and len(tsent) >= 9:
             # choose a verb in the sentence randomply
             verbs = [verb for verb in tsent if verb[3] == TANL_VERB]
             indVerb = random.randint (0, len(verbs)-1)
@@ -269,7 +269,7 @@ class SentenceExtractor:
 
 
     def LoadSentence (self, inx):
-      """
+        """
         Args:
             inx (int): index of the sentence
         Returns:
